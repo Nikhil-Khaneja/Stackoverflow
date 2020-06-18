@@ -61,16 +61,22 @@ class QuestionsController extends Controller
     public function edit(Question $question)
     {
          // app('debugbar')->disable();
-         return view('questions.edit', compact([
-             'question'
-         ]));
+         //if(Gate::allows('update-question', $question)){
+        if($this->authorize('update', $question)){ 
+            return view('questions.edit', compact([
+                'question'
+            ]));
+        }
+         abort(403);
     }
 
     
     public function update(UpdateQuestionRequest $request, Question $question)
     {
         //method 1 for calling gate
-        if(Gate::allows('update-question', $question)){
+        //if(Gate::allows('update-question', $question)){
+            //jaise hi policy banaunga toh authorize method aa jaayega controller ke pass jo meko batayega ki kisko call karna hai 
+        if($this->authorize('update', $question)){
             $question->update([
                 'title'=>$request->title,
                 'body'=>$request->body
@@ -85,7 +91,8 @@ class QuestionsController extends Controller
     public function destroy(Question $question)
     {
         //method 2 for calling gate
-        if(auth()->user()->can('delete-question', $question)){
+        //if(auth()->user()->can('delete-question', $question)){
+        if($this->authorize('delete',$question)){
             $question->delete();
             session()->flash('success','Question has been added deleted Successfully!');
             return redirect(route('questions.index'));
