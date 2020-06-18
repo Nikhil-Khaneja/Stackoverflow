@@ -34,15 +34,21 @@
                                             <a href="{{ $question->url }} "> {{ $question->title }}</a>
                                         </h4>
                                         <div class="d-flex">
-                                            <div class="mr-2">
-                                                <a href="{{ route('questions.edit', $question->id)}} " class="btn btn-sm btn-outline-info">Edit</a>
-                                            </div>
+                                            {{-- @if (auth()->user() && auth()->user()->can('update_question', $question)) --}}
+                                            @can('update-question', $question)   
+                                                <div class="mr-2">
+                                                    <a href="{{ route('questions.edit', $question->id)}} " class="btn btn-sm btn-outline-info">Edit</a>
+                                                </div>
+                                                 endcan   
+                                            {{-- @endif --}}
                                             
-                                            <form action="{{  route('questions.destroy', $question->id)}}" method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                            </form>
+                                            @can('delete-question', $question)
+                                                <form action="{{  route('questions.destroy', $question->id)}}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                                </form>
+                                            @endcan
                                             
                                         </div>
                                     </div>
@@ -51,6 +57,7 @@
                                         <span class="text-muted">| Asked: {{ $question->created_date}} </span>    
                                     </p>
                                     <p>{!!Str::limit($question->body, 250)!!}</p>
+                                    {{-- strip_tags() - thus function wll remove all the tags from above stmt and run it as plain stmt --}}
                                 </div>
                             </div>
                         </div>

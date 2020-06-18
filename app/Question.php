@@ -12,7 +12,9 @@ class Question extends Model
     /**
      * MUTATORS - These are soecial functions which have setXXXAttribute($value);
      */
-
+    /** attributes is given by model class so you can add any field you want to add and when you are gonna add the data in db it will check 
+     * the fields on that time and add, it is like  an array 
+     */
     public function setTitleAttribute($title){
         $this->attributes['title'] = $title;
         $this->attributes['slug'] = Str::slug($title);
@@ -21,7 +23,7 @@ class Question extends Model
     * Accesors - These are special functions which have getXXXAttribute()
     */
    public function getUrlAttribute(){
-       return "questions/{$this->id}";
+       return "questions/{$this->slug}";
    }
    public function getCreatedDateAttribute(){
        return $this->created_at->diffForHumans();
@@ -35,6 +37,11 @@ class Question extends Model
        }
        return "unanswered";
    }
+
+//    public function getFullNameAttribute(){
+//        return $this->first_name. " " .$this->last_name;
+//    }
+   
     /**
      * RELATIONSHIP METHODNJS
      */
