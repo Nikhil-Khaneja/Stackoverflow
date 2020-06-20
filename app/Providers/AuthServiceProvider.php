@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Answer;
+use App\Policies\AnswerPolicy;
 use App\Policies\QuestionsPolicy;
 use App\Question;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -16,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
-        Question::class =>QuestionsPolicy::class
+        Question::class =>QuestionsPolicy::class,
+        Answer::class => AnswerPolicy::class
     ];
 
     /**

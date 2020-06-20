@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,5 +22,9 @@ Auth::routes();
 Route::resource('questions','QuestionsController')->except('show');
 
 Route::get('questions/{slug}', 'QuestionsController@show')->name('questions.show');
+
+Route::resource('questions.answers', 'AnswersController')->except('index','show','create');
+
+Route::put('answers/{answer}/best-answer','AnswersController@bestAnswer')->name('answers.bestAnswer');
 
 Route::get('/home', 'HomeController@index')->name('home');

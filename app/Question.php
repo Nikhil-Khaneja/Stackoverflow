@@ -52,4 +52,12 @@ class Question extends Model
     public function answers() {
         return $this->hasMany(Answer::class);
     }
+
+    /**
+     * HELPER FUNCTION
+     */
+    public function markBestAnswer(Answer $answer){
+        $this->best_answer_id = $answer->id;
+        $this->save();
+    }
 }

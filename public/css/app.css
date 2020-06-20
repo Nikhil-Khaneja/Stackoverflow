@@ -10939,7 +10939,7 @@ a.text-dark:focus {
 
 .statistics .answers.answered {
   border: solid 1px #38c172;
-  color: #fff;
+  color: #38c172;
 }
 
 .statistics .answers.has-best-answer {
