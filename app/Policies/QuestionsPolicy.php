@@ -91,4 +91,11 @@ class QuestionsPolicy
     {
         //
     }
+
+    public function markAsfavorite(User $user, Question $question){
+        return $user->id !=$question->user_id;
+    }
+    public function vote(User $user, Question $question){
+        return $user->id != $question->user_id;
+    }
 }

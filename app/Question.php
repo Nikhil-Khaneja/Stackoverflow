@@ -38,7 +38,17 @@ class Question extends Model
        return "unanswered";
    }
 
-//    public function getFullNameAttribute(){
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites->count();
+    }
+
+    public function getIsFavoriteAttribute()
+    {
+        return $this->favorites()->where(['user_id'=>auth()->id()])->count() > 0;
+    }
+
+    //    public function getFullNameAttribute(){
 //        return $this->first_name. " " .$this->last_name;
 //    }
    
@@ -53,11 +63,42 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function favorites(){
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    public function votes(){
+        return $this->morphToMany(User::class, 'vote')->withTimestamps();
+    }
     /**
      * HELPER FUNCTION
      */
     public function markBestAnswer(Answer $answer){
         $this->best_answer_id = $answer->id;
         $this->save();
+    }
+
+    public function vote(int $vote){
+        $this->votes()->attach(auth()->id(), [ 'vote'=>$vote]);
+        if($vote < 0){
+            $this->decrement('votes_count');
+        }
+        else{
+            $this->increment('votes_count');
+        }
+    }
+
+    public function updateVote(int $vote){
+        //User may have already up-voted this questin and now down-votes (votes_cont = 9)  strt - vc - 8, then up vc - 9 n now  decrmt - votes-count -8 (curent) now make it decrement ie +1 time decrement
+
+        $this->votes()->updateExistingPivot(auth()->id(), ['vote'=>$vote]);
+        if($vote < 0){
+            $this->decrement('votes_count');
+            $this->decrement('votes_count');
+        }
+        else{
+            $this->increment('votes_count');
+            $this->increment('votes_count');
+        }
     }
 }

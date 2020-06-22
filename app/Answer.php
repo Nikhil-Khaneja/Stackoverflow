@@ -47,4 +47,36 @@ class Answer extends Model
     public function author() {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function votes(){
+        return $this->morphToMany(User::class, 'vote')->withTimestamps();
+    }
+
+    /**
+     * HELPER FUNCTIONS
+     */
+
+    public function vote(int $vote){
+        $this->votes()->attach(auth()->id(), [ 'vote'=>$vote]);
+        if($vote < 0){
+            $this->decrement('votes_count');
+        }
+        else{
+            $this->increment('votes_count');
+        }
+    }
+
+    public function updateVote(int $vote){
+        //User may have already up-voted this questin and now down-votes (votes_cont = 9)  strt - vc - 8, then up vc - 9 n now  decrmt - votes-count -8 (curent) now make it decrement ie +1 time decrement
+
+        $this->votes()->updateExistingPivot(auth()->id(), ['vote'=>$vote]);
+        if($vote < 0){
+            $this->decrement('votes_count');
+            $this->decrement('votes_count');
+        }
+        else{
+            $this->increment('votes_count');
+            $this->increment('votes_count');
+        }
+    }
 }

@@ -28,3 +28,22 @@ Route::resource('questions.answers', 'AnswersController')->except('index','show'
 Route::put('answers/{answer}/best-answer','AnswersController@bestAnswer')->name('answers.bestAnswer');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('question/{question}/favorite', 'favoritesController@store')->name('questions.favorite');
+
+Route::delete('question/{question}/unfavorite', 'favoritesController@destroy')->name('questions.unfavorite');
+
+Route::post('questions/{question}/vote/{vote}', 'VotesController@voteQuestion')->name('questions.vote');
+Route::post('answers/{answer}/vote/{vote}', 'VotesController@voteAnswer')->name('answers.vote');
+
+
+
+
+
+
+
+
+
+
+
+

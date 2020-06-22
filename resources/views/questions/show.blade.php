@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.1/trix.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.1/trix.css">
 @endsection
 
 @section('content')
@@ -20,19 +20,51 @@
                         <div class="d-flex justify-content-between mr-3">
                             <div class="d-flex">
                                 <div>
-                                    <a href="" title="Up Vote" class="vote-up d-block text-center text-dark">
-                                        <i class="fa fa-caret-up fa-3x" aria-hidden="true"></i>
-                                    </a>
-                                    <h4 class="votes-count text-muted text-center m-0">45</h4>
-                                    <a href="" title="Down Vote" class="vote-down d-block text-center text-black-50">
-                                        <i class="fa fa-caret-down fa-3x" aria-hidden="true"></i>
-                                    </a>
+                                    @can('vote', $question)
+                                        <form action="{{ route('questions.vote', [$question->id, 1]) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn {{ auth()->user()->hasQuestionUpVote($question) ? 'text-dark': 'text-black-50' }}">
+                                                <i class="fa fa-caret-up fa-3x" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('login') }}" title="Up Vote" class="vote-up d-block text-center text-black-50">
+                                            <i class="fa fa-caret-up fa-3x" aria-hidden="true"></i>
+                                        </a>
+                                    @endcan
+                                    <h4 class="votes-count text-muted text-center m-0">{{ $question->votes_count }}</h4>
+                                    @can('vote', $question)
+                                        <form action="{{ route('questions.vote', [$question->id, -1]) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn {{ auth()->user()->hasQuestionDownVote($question) ? 'text-dark': 'text-black-50' }}">
+                                                <i class="fa fa-caret-down fa-3x" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('login') }}" title="Up Vote" class="vote-up d-block text-center text-black-50">
+                                            <i class="fa fa-caret-down fa-3x" aria-hidden="true"></i>
+                                        </a>
+                                    @endcan
                                 </div>
 
-                                <div class="ml-5 mt-2">
-                                    <a href="" title="Mark as favorite" class="favorite d-block text-center mb-2"><i
-                                            class="fa fa-star fa-2x text-dark" aria-hidden="true"></i></a>
-                                    <h4 class="votes-count m-0 text-center">123</h4>
+                            <div class="ml-5 mt-2 {{ $question->is_favorite ? 'text-warning' : 'text-black-50' }}">
+                            @can('markAsFavorite', $question)
+                                <form
+                                 action="{{  route($question->is_favorite ? 'questions.unfavorite' : 'questions.favorite', $question->id)  }}"
+                                method="POST"    >
+                                @csrf
+                                @if ($question->is_favorite)
+                                    @method('DELETE')
+                                @endif
+                                <button type="submit" class="btn {{ $question->is_favorite ? 'text-warning' : 'text-black-50' }} ">
+                                <i class="fa fa-2x {{ $question->is_favorite ? 'fa-star' : 'fa-star-o' }}" aria-hidden="true"></i>
+                                </button>
+                                </form>
+                            <h4 class="votes-count m-0 text-center ">{{$question->favorites_count}}</h4>
+                            @else
+                            <i class="fa fa-2x fa-star-o text-black-50" aria-hidden="true"></i>
+                            <h4 class="votes-count m-0 text-center text-black-50">{{$question->favorites_count}}</h4>
+                                @endcan
                                 </div>
                             </div>
                             <div class="d-flex flex-column">
@@ -58,10 +90,8 @@
         <!--ANSWERS-->
         @include('answers._index')
 
-        @include('answers._create')
-    </div>
-@endsection
 
-@section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.1/trix.js"></script>
+        @include('answers._create')
+
+    </div>
 @endsection
