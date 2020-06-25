@@ -36,8 +36,7 @@ Route::delete('question/{question}/unfavorite', 'favoritesController@destroy')->
 Route::post('questions/{question}/vote/{vote}', 'VotesController@voteQuestion')->name('questions.vote');
 Route::post('answers/{answer}/vote/{vote}', 'VotesController@voteAnswer')->name('answers.vote');
 
-
-
+Route::get('users/notifications', 'UsersController@notifications')->name('users.notifications');
 
 
 

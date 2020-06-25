@@ -95,3 +95,7 @@
 
     </div>
 @endsection
+
+@section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.2.1/trix.js"></script>
+@endsection

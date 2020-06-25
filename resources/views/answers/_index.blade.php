@@ -53,7 +53,6 @@
 
                                     @if ($answer->is_best)
                                         <i class="fa fa-check fa-2x d block text-success mb-2"></i>
-                                    
                                     @endif
                                 @endcan
 

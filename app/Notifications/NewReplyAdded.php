@@ -30,7 +30,7 @@ class NewReplyAdded extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database']; //this line will let know where we want to send a notification
     }
 
     /**
@@ -43,7 +43,7 @@ class NewReplyAdded extends Notification
     {
         return (new MailMessage)
                     ->line('A new reply has been added to your question. ')
-                    ->action('Notification Action', url($this->question->url()))
+                    ->action('Notification Action', url($this->question->url))
                     ->line('Thank you for using our application!');
     }
 
@@ -56,7 +56,7 @@ class NewReplyAdded extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'question' =>$this->question
         ];
     }
 }

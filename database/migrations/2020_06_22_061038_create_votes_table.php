@@ -21,7 +21,8 @@ class CreateVotesTable extends Migration
             $table->tinyInteger('vote');
             $table->timestamps();
 
-            $table->unique('user_id', 'vote_id', 'vote_type');
+            $table->unique(['vote_id', 'user_id', 'vote_type']);
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Answer;
 use App\Http\Requests\Answers\UpdateAnswerRequest;
+use App\Notifications\NewReplyAdded;
 use App\Question;
 use Illuminate\Http\Request;
 
@@ -41,6 +42,7 @@ class AnswersController extends Controller
             'body'=>$request->body,
             'user_id'=>auth()->id()
         ]);
+        $question->owner->notify(new NewReplyAdded($question));
         session()->flash('success', 'Your answer submitted succesfully!');
         return redirect($question->url);
     }
