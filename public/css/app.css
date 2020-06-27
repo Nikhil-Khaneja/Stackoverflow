@@ -10952,3 +10952,7 @@ a.text-dark:focus {
   color: #fff;
 }
 
+.navbar .logo{
+  width: auto;
+  height: auto;
+}

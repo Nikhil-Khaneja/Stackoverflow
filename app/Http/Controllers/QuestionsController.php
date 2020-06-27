@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Questions\CreateQuestionRequest;
-use App\Http\Requests\Questions\UpdateQuestionRequest;
+use App\Http\Requests\Questions\UpdateQuestionRequest; 
+use App\Notifications\QuestionUpdated;
 use App\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -81,6 +82,7 @@ class QuestionsController extends Controller
                 'title'=>$request->title,
                 'body'=>$request->body
             ]);
+            $question->owner->notify(new QuestionUpdated($question, "Your Question updated successfully!!"));
             session()->flash('success', 'Question has been updated SuccessFully !');
             return redirect(route('questions.index'));
         }
@@ -94,6 +96,7 @@ class QuestionsController extends Controller
         //if(auth()->user()->can('delete-question', $question)){
         if($this->authorize('delete',$question)){
             $question->delete();
+            $question->owner->notify(new QuestionUpdated($question, "Your Question deleted successfully!!"));
             session()->flash('success','Question has been added deleted Successfully!');
             return redirect(route('questions.index'));
         }

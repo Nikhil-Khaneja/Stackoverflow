@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewReplyAdded extends Notification
+class NewFavoriteAdded extends Notification
 {
     use Queueable;
 
@@ -30,7 +30,7 @@ class NewReplyAdded extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database']; //this line will let know where we want to send a notification
+        return ['mail', 'database'];
     }
 
     /**
@@ -42,7 +42,7 @@ class NewReplyAdded extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('A new reply has been added to your question ')
+                    ->line('Your question is marked favorite.')
                     ->action('Notification Action', url($this->question->url))
                     ->line('Thank you for using our application!');
     }

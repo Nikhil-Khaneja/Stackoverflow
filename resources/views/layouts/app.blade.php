@@ -9,7 +9,8 @@
 
     <title>{{--{{ config('app.name', 'Stack Overflow') }}--}} Stack Overflow</title>
 
-    
+    {{-- Favicon --}}
+    <link rel="shortcut icon" href="{{asset('assets/img/logo.png')}}">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -22,8 +23,10 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Stack Overflow
+                <img src="{{ asset('assets/img/logo.png')}}" alt="" class="logo">
+                &nbsp;
+                <a class="navbar-brand" href="{{ url('/questions') }}">
+                      Stack Overflow
                     {{-- {{ config('app.name', 'Stack Overflow') }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

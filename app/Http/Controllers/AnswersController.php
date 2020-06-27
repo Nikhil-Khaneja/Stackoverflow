@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Answer;
 use App\Http\Requests\Answers\UpdateAnswerRequest;
+use App\Notifications\ChangesUpdated;
 use App\Notifications\NewReplyAdded;
 use App\Question;
 use Illuminate\Http\Request;
@@ -66,7 +67,7 @@ class AnswersController extends Controller
      */
     public function edit(Question $question, Answer $answer)
     {
-        $this->authorize('update',$answer);
+        $this->authorize('update', $answer);
         
         return view('answers.edit',compact([
             'question',
@@ -87,6 +88,7 @@ class AnswersController extends Controller
         $answer->update([
             'body'=>$request->body
         ]);
+        $answer->author->notify(new ChangesUpdated($answer, "Your changes has been updated successfully!!"));
         session()->flash('success', 'Your answer updated succesfully!');
         return redirect($question->url);
     }
@@ -101,6 +103,7 @@ class AnswersController extends Controller
     {
         $this->authorize('delete', $answer);
         $answer->delete();
+        $answer->author->notify(new ChangesUpdated($answer, "Your answer is deleted successfully!!"));
         session()->flash('success', 'Your answer deleted succesfully!');
         return redirect($question->url);
     }

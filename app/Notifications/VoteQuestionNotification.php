@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewReplyAdded extends Notification
+class VoteQuestionNotification extends Notification
 {
     use Queueable;
 
@@ -17,9 +17,10 @@ class NewReplyAdded extends Notification
      *
      * @return void
      */
-    public function __construct(Question $question)
+    public function __construct(Question $question, String $msg)
     {
         $this->question = $question;
+        $this->msg = $msg;
     }
 
     /**
@@ -30,7 +31,7 @@ class NewReplyAdded extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database']; //this line will let know where we want to send a notification
+        return ['mail','database'];
     }
 
     /**
@@ -41,8 +42,9 @@ class NewReplyAdded extends Notification
      */
     public function toMail($notifiable)
     {
+        dd($this->question->url);
         return (new MailMessage)
-                    ->line('A new reply has been added to your question ')
+                    ->line($this->msg)
                     ->action('Notification Action', url($this->question->url))
                     ->line('Thank you for using our application!');
     }
@@ -56,7 +58,7 @@ class NewReplyAdded extends Notification
     public function toArray($notifiable)
     {
         return [
-            'question' =>$this->question
+            'question'=>$this->question
         ];
     }
 }

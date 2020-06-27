@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
-
+         {{-- Favicon --}}
+        <link rel="shortcut icon" href="{{asset('assets/img/logo.png')}}">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
@@ -61,6 +62,9 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            .main-logo {
+                padding-bottom: 10px;
+            }
         </style>
     </head>
     <body>
@@ -68,7 +72,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ url('/questions') }}">Questions</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -80,6 +84,9 @@
             @endif
 
             <div class="content">
+                <div class="main-logo">
+                    <img src="{{ asset('assets/img/main-logo.jpg')}}" alt="">
+                </div>
                 <div class="title m-b-md">
                     StackOverFlow
                 </div>

@@ -86,7 +86,7 @@ class User extends Authenticatable
 
     public function hasAnswerDownVote(Answer $answer){
        return auth()->user()->votesAnswers()->where(['vote'=>-1,'vote_id'=>$answer->id])->exists();       
-   }
+    }
 
    public function hasVoteForAnswer(Answer $answer){
        return $this->hasAnswerUpVote($answer) || $this->hasAnswerDownVote($answer);

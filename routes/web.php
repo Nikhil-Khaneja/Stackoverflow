@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnswersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 /*
@@ -19,11 +20,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('questions','QuestionsController')->except('show');
-
+Route::resource('questions','QuestionsController')->middleware('auth')->except('show','index');
+Route::get('questions', 'QuestionsController@index')->name('questions.index');
 Route::get('questions/{slug}', 'QuestionsController@show')->name('questions.show');
 
-Route::resource('questions.answers', 'AnswersController')->except('index','show','create');
+Route::resource('questions.answers', 'AnswersController')->except('index','show','create')->middleware('auth');
+//Route::post('questions.answers','AnswersController@store')->name('questions.answers.store')
 
 Route::put('answers/{answer}/best-answer','AnswersController@bestAnswer')->name('answers.bestAnswer');
 
